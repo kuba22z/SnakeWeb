@@ -5,7 +5,7 @@ import React, {useEffect, useRef, useState} from "react";
 
 const INIT_POSX = 80;
 const INIT_POSY = 80;
-const INIT_LENGHT = 4; //4 Rectangle ->4X20
+const INIT_LENGHT = 20; //4 Rectangle ->4X20
 const SIZE = 20;
 
 const HIGH_X = 400;
@@ -18,6 +18,7 @@ const PANE_HEI = HIGH_Y - LOW_Y;
 let x = SIZE, y = 0;
 let direction = 'right'
 let directionChanged = false
+let delay=250;
 
 function App() {
 
@@ -35,6 +36,8 @@ function App() {
     return temp;
 
     }
+
+   // const [isRunning, setIsRunning] = useState(true)
     const [snake, setSnake] = useState(initSnake);
 
 
@@ -42,13 +45,15 @@ function App() {
         window.addEventListener('keydown', e => {
 
             trackOnKey(e.key);
+
         });
+
     }, []);
 
     const trackOnKey = key => {
-        if(directionChanged) return
+        if(directionChanged) return //to synchronize changing direction with game speed
 
-        if (key==='ArrowUp'&& direction !== "down") { //Dir==2 to disable changing in a opposite direction
+        if (key==='ArrowUp'&& direction !== "down") { //to disable changing in a opposite direction
         direction='up'
         } else if (key==='ArrowDown' && direction !== 'up') {
            direction='down'
@@ -59,7 +64,6 @@ function App() {
         }
         directionChanged=true;
     };
-
 
     function moveAllParts() {
 
@@ -99,34 +103,25 @@ function App() {
         setSnake(newSnake)
     }
  function checkEnd() {
-        if (snake[0].x >= HIGH_X || snake[0].x < LOW_X ||
-            snake[0].y >= HIGH_Y || snake[0].y < LOW_Y ||
-            collision(snake[0].x, snake[0].y)) {
-            return true;
-           // update_highscore();
 
-          //  isRunning = false;
-
-        }
-        return false;
+            return !(snake[0].x >= HIGH_X || snake[0].x < LOW_X ||
+                snake[0].y >= HIGH_Y || snake[0].y < LOW_Y ||
+                collision(snake[0].x, snake[0].y));
     }
- function collision( X, Y) {    //prove whether parts(Snake) collided with X and Y
-    // const exists = snake.some(v => (v.x === X && v.y === Y && v!==snake[0]));
-
+ function collision( X, Y) {
         for (let i = 1; i < snake.length; i++) {
-            if ( snake.some(v => (v.x === X && v.y === Y && v!==snake[0])))
+            if ( snake[i].x === X && snake[i].y === Y)
                 return true;
         }
         return false;
     }
 
-    useInterval(() => {
-            //will be called every 500ms
-        if(!checkEnd())
+   useInterval(() => {
+            //will be called every value of delay
             moveAllParts()
-            directionChanged=false;
+            directionChanged = false;
         }
-        , 250)
+        , checkEnd() ? delay : null)
 
     function useInterval(callback, delay) {
         const savedCallback = useRef();
