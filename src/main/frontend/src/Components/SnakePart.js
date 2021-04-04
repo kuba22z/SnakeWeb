@@ -1,12 +1,12 @@
 import React from "react";
 
-const SnakePart= ({part}) => {
+const SnakePart= ({part,size}) => {
     return (
         <rect
             x={part.x}
             y={part.y}
-            width={part.width}
-            height={part.height}
+            width={size}
+            height={size}
             style={{
                 background: "black",
             }}

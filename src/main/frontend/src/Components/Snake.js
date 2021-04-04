@@ -1,13 +1,13 @@
 import SnakePart from "./SnakePart";
 
 
-const Snake= ({snake}) => {
+const Snake= ({snake,size}) => {
 
     return (
         <svg width={500} height={500} style={{background: "blue", display: "block" ,margin:"auto"}}>
             {snake.map((snakePart, index) => {
                 return (
-                    <SnakePart part={snakePart} key={index} className='Block'/>
+                    <SnakePart part={snakePart} key={index} size={size} className='Block'/>
                 )
             })}
 

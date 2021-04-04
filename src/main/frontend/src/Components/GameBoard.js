@@ -1,11 +1,11 @@
 import React from "react";
 import Snake from "./Snake";
 
-const GameBoard= ({snake}) => {
+const GameBoard= ({snake,size,borders}) => {
 
     return (
-        <svg width={500} height={500} style={{background: "#9FF", display: "block" ,margin:"auto"}}>
-            <Snake snake={snake} />
+        <svg width={borders.highY-borders.lowY} height={borders.highX-borders.lowX} style={{background: "#9FF", display: "block" ,margin:"auto"}}>
+            <Snake snake={snake} size={size} />
         </svg>
     );
 }
