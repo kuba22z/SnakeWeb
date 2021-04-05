@@ -1,8 +1,8 @@
-import logo from './logo.svg';
 import './App.css';
 import GameBoard from "./Components/GameBoard";
 import randomColor from "randomcolor";
 import React, {useEffect, useRef, useState} from "react";
+import ScoreBoard from "./Components/ScoreBoard";
 
 const STEP = 20;
 const PARTSIZE = 18;
@@ -10,7 +10,7 @@ const PARTSIZE = 18;
 const INIT ={
     posX : 20,
     posY : 80,
-    length : 20 //4 Rectangle
+    length : 4 //4 Rectangle
 }
 //Borders of the game board
 const BORDERS ={
@@ -19,7 +19,7 @@ const BORDERS ={
     highY: 500,
     lowY: 0
 }
-let delay=250;
+let delay=100;
 let direction ={
     x : STEP,
     y : 0,
@@ -59,6 +59,16 @@ function App() {
         }
         while (collision(temp.x, temp.y));
        return temp
+    }
+    function checkSpawnFood(){
+        if (snake[0].x === food.x && snake[0].y === food.y) {
+            setFood(spawnFood())
+            snake.push({
+                 x : snake[snake.length-1].x,
+                 y : snake[snake.length-1].y
+                })
+            setSnake(snake)
+        }
     }
 
     const trackOnKey = key => {
@@ -133,6 +143,7 @@ function App() {
             //will be called every value of delay
 
             moveAllParts()
+            checkSpawnFood()
             direction.changed = false;
         }
         , checkEnd() ? delay : null)
@@ -161,9 +172,7 @@ function App() {
     return (
         <div className="app">
             <div className="game">
-                <header className="scoreBoard">
-                    <img src={logo} width={100} height={100} className="App-logo" alt="logo"/>
-                </header>
+                <ScoreBoard />
                 <GameBoard snake={snake} size={PARTSIZE} borders={BORDERS} food={food} />
 
             </div>
