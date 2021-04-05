@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import GameBoard from "./Components/GameBoard";
+import randomColor from "randomcolor";
 import React, {useEffect, useRef, useState} from "react";
 
 const STEP = 20;
@@ -9,7 +10,7 @@ const PARTSIZE = 18;
 const INIT ={
     posX : 20,
     posY : 80,
-    length : 4 //4 Rectangle
+    length : 20 //4 Rectangle
 }
 //Borders of the game board
 const BORDERS ={
@@ -41,16 +42,24 @@ function App() {
     return temp;
 
     }
+    const [snake, setSnake] = useState(initSnake)
+    const [food, setFood] = useState(spawnFood)
 
-   // const [isRunning, setIsRunning] = useState(true)
-    const [snake, setSnake] = useState(initSnake);
-
-
-    useEffect(() => {
-        window.addEventListener('keydown', e => {
-            trackOnKey(e.key);
-        });
-    }, []);
+    function spawnFood() {
+        let temp =[];
+        let color= randomColor() ;
+        if(color==="#9FF")
+            color="red"
+        do{
+            temp={ //Math.floor round down the argument
+                x:  Math.floor((Math.random() * (BORDERS.highX - BORDERS.lowX + 1) + BORDERS.lowX)/STEP)*STEP,
+                y:   Math.floor((Math.random() * (BORDERS.highY - BORDERS.lowY + 1) + BORDERS.lowY)/STEP)*STEP +BORDERS.lowY,
+                color : color
+            };
+        }
+        while (collision(temp.x, temp.y));
+       return temp
+    }
 
     const trackOnKey = key => {
         if(direction.changed) return //to synchronize changing direction with game speed
@@ -99,7 +108,7 @@ function App() {
         for (let i=1; i<snake.length;i++)
             newSnake.push(snake[i - 1]);
 
-        setSnake(newSnake)
+        setSnake(newSnake) //this will be show the new Snake
     }
  function checkEnd() {
             return !(snake[0].x >=BORDERS.highX  || snake[0].x < BORDERS.lowX ||
@@ -114,8 +123,15 @@ function App() {
         return false;
     }
 
-   useInterval(() => {
+    useEffect(() => {
+        window.addEventListener('keydown', e => {
+            trackOnKey(e.key);
+        });
+    }, []);
+
+    useInterval(() => {
             //will be called every value of delay
+
             moveAllParts()
             direction.changed = false;
         }
@@ -148,7 +164,7 @@ function App() {
                 <header className="scoreBoard">
                     <img src={logo} width={100} height={100} className="App-logo" alt="logo"/>
                 </header>
-                <GameBoard snake={snake} size={PARTSIZE} borders={BORDERS} />
+                <GameBoard snake={snake} size={PARTSIZE} borders={BORDERS} food={food} />
 
             </div>
         </div>

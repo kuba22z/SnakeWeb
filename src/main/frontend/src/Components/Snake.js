@@ -1,16 +1,16 @@
 import SnakePart from "./SnakePart";
+import Food from "./Food";
 
 
 const Snake= ({snake,size}) => {
 
     return (
-        <svg width={500} height={500} style={{background: "blue", display: "block" ,margin:"auto"}}>
+        <svg >
             {snake.map((snakePart, index) => {
                 return (
                     <SnakePart part={snakePart} key={index} size={size} className='Block'/>
                 )
             })}
-
         </svg>
     );
 }
