@@ -14,6 +14,7 @@
   right: 20px;
   height: 5vmin;
   pointer-events: none;
+
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -21,12 +22,31 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-.scoreBoard {
+.scoreBoard{
   background-color: dodgerblue;
   min-height: 5vh;
   display: flex;
   flex-direction: column;
 }
+
+.headerlist{
+  list-style-type: none;
+
+  margin-left: 10px;
+  margin-right: auto;
+  margin-top: -35px;
+
+  height: 5px;
+  font-size: 18px;
+}
+
+.headerlist > li{
+  float: left;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+
 .game{
   min-height: 57vh;
   display: flex;

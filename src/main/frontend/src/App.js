@@ -4,12 +4,12 @@ import randomColor from "randomcolor";
 import React, {useEffect, useRef, useState} from "react";
 import ScoreBoard from "./Components/ScoreBoard";
 
-const STEP = 20;
-const PARTSIZE = 18;
+const STEP = 25;
+const PARTSIZE = 23;
 
 const INIT ={
-    posX : 20,
-    posY : 80,
+    posX : STEP,
+    posY : 2*STEP,
     length : 4 //4 Rectangle
 }
 //Borders of the game board
@@ -44,12 +44,12 @@ function App() {
     }
     const [snake, setSnake] = useState(initSnake)
     const [food, setFood] = useState(spawnFood)
+    const [score, setScore] = useState(0)
 
     function spawnFood() {
         let temp =[];
-        let color= randomColor() ;
-        if(color==="#9FF")
-            color="red"
+        let colors= ["#c0c0c0","#808080","#800000","#ff0000","#800080","#ff00ff","#008000","#00ff00","#808000","#ffff00","#000080","#0000ff"] ;
+        let color = colors[Math.floor(Math.random()*(colors.length))]
         do{
             temp={ //Math.floor round down the argument
                 x:  Math.floor((Math.random() * (BORDERS.highX - BORDERS.lowX + 1) + BORDERS.lowX)/STEP)*STEP,
@@ -68,6 +68,7 @@ function App() {
                  y : snake[snake.length-1].y
                 })
             setSnake(snake)
+            setScore(score+1)
         }
     }
 
@@ -172,7 +173,7 @@ function App() {
     return (
         <div className="app">
             <div className="game">
-                <ScoreBoard />
+                <ScoreBoard score={score} />
                 <GameBoard snake={snake} size={PARTSIZE} borders={BORDERS} food={food} />
 
             </div>
