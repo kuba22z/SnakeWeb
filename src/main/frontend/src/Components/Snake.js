@@ -1,6 +1,4 @@
 import SnakePart from "./SnakePart";
-import Food from "./Food";
-
 
 const Snake= ({snake,size}) => {
 

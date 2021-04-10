@@ -19,14 +19,13 @@ const BORDERS ={
     highY: 500,
     lowY: 0
 }
-let delay=100;
+
 let direction ={
     x : STEP,
     y : 0,
     get: "right",
     changed : false
 }
-
 
 function App() {
 
@@ -45,6 +44,11 @@ function App() {
     const [snake, setSnake] = useState(initSnake)
     const [food, setFood] = useState(spawnFood)
     const [score, setScore] = useState(0)
+    const [delay, setDelay] =useState(null)
+    function setDela(){
+      setDelay(250)
+    }
+
 
     function spawnFood() {
         let temp =[];
@@ -173,7 +177,7 @@ function App() {
     return (
         <div className="app">
             <div className="game">
-                <ScoreBoard score={score} />
+                <ScoreBoard score={score} start={setDela} />
                 <GameBoard snake={snake} size={PARTSIZE} borders={BORDERS} food={food} />
 
             </div>
