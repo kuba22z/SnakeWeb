@@ -3,6 +3,7 @@ import GameBoard from "./Components/GameBoard";
 import randomColor from "randomcolor";
 import React, {useEffect, useRef, useState} from "react";
 import ScoreBoard from "./Components/ScoreBoard";
+import GameOver from "./Components/GameOver";
 
 const STEP = 25;
 const PARTSIZE = 23;
@@ -29,7 +30,7 @@ let direction ={
 
 function App() {
 
-  function initSnake(){
+    function initSnake(){
         const temp =[];
 
        for (let i = 0, k = 3 * STEP; i < INIT.length; i++, k -= STEP) {
@@ -45,11 +46,19 @@ function App() {
     const [food, setFood] = useState(spawnFood)
     const [score, setScore] = useState(0)
     const [delay, setDelay] =useState(null)
-    function setDela(){
-      setDelay(250)
-    }
+  let gameOver=false
 
+       function resetGame(){
+        setSnake(initSnake())
 
+           direction ={
+               x : STEP,
+               y : 0,
+               get: "right",
+               changed : false
+           }
+
+       }
     function spawnFood() {
         let temp =[];
         let colors= ["#c0c0c0","#808080","#800000","#ff0000","#800080","#ff00ff","#008000","#00ff00","#808000","#ffff00","#000080","#0000ff"] ;
@@ -126,9 +135,14 @@ function App() {
         setSnake(newSnake) //this will be show the new Snake
     }
  function checkEnd() {
-            return !(snake[0].x >=BORDERS.highX  || snake[0].x < BORDERS.lowX ||
+            if(snake[0].x >=BORDERS.highX  || snake[0].x < BORDERS.lowX ||
                 snake[0].y >= BORDERS.highY || snake[0].y < BORDERS.lowY ||
-                collision(snake[0].x, snake[0].y));
+                collision(snake[0].x, snake[0].y))
+            {
+               gameOver=true;
+                return false;
+            }
+            return true;
     }
  function collision( X, Y) {
         for (let i = 1; i < snake.length; i++) {
@@ -146,7 +160,6 @@ function App() {
 
     useInterval(() => {
             //will be called every value of delay
-
             moveAllParts()
             checkSpawnFood()
             direction.changed = false;
@@ -177,8 +190,11 @@ function App() {
     return (
         <div className="app">
             <div className="game">
-                <ScoreBoard score={score} start={setDela} />
+                <ScoreBoard score={score} setDelay={setDelay} resetGame={resetGame} />
                 <GameBoard snake={snake} size={PARTSIZE} borders={BORDERS} food={food} />
+                {gameOver ?   <GameOver resetGame={resetGame}/> : false  }
+
+
 
             </div>
         </div>
