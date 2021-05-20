@@ -1,12 +1,8 @@
 package com.example.snakeweb.user;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.Period;
 
 //Migration
 @Entity
