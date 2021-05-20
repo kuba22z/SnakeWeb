@@ -1,6 +1,8 @@
 package com.example.snakeweb.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
@@ -12,47 +14,31 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository UserRepository) {
-        this.userRepository = UserRepository;
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
-    public List<User> getUser() {
-        return userRepository.findAll();
-        //findAll() retruns a List<User>
-    }
-    public Optional<User> getOneUser(String name){
-        return userRepository.findUserByName(name);
+    public List<User> getAllUser() {
+        return userRepository.findAll(Sort.by(Sort.Direction.DESC, "record"));
     }
 
-
-    public void addNewUser(User user) {
+    @Transactional //caused that all Queries will be executed in a transiction
+    public User addNewUser(User user) {
         Optional<User> userOptional =
                 userRepository.findUserByName(user.getName());
-        if (userOptional.isEmpty() )
+        if (userOptional.isEmpty()) {
             userRepository.save(user);
-
+            return user;
+        } else
+            return userOptional.get();
     }
 
-    public void deleteUser(Long id) {
-        if (!userRepository.existsById(id))
-            throw new IllegalStateException("User with id " + id + " does not exists");
-        userRepository.deleteById(id);
-    }
-
-    @Transactional  //caused that all Queries will be executed in a transaciton
-    public void updateUser(Long id, String name, String email) {
-     /*   User User = UserRepository.findById(id).
+    @Transactional
+    public User updateRecord(Long id, int newRecord) {
+        User user = userRepository.findById(id).
                 orElseThrow(() -> new IllegalStateException(
-                        "User with id" + id + " does not exists"));
-
-        if (name != null && name.length() > 0 && !Objects.equals(User.getName(), name))
-            User.setName(name);
-
-        if (email != null && email.length() > 0 && !Objects.equals(User.getEmail(), email)) {
-            Optional<User> UserOptional = UserRepository.findUserByEmail(email);
-            if (UserOptional.isPresent())
-                throw new IllegalStateException("email taken");
-            User.setEmail(email);
-        }*/
+                        "User with id: " + id + " does not exists"));
+        user.setRecord(newRecord);
+        return user;
     }
 }

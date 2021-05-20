@@ -13,7 +13,7 @@ import java.time.Period;
 @Table
 public class User {
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NonNull
@@ -51,9 +51,6 @@ public class User {
 
     private int record;
 
-
     public User() {
     }
-
-
 }
