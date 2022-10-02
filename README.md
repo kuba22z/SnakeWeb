@@ -1,3 +1,2 @@
-# SnakeWeb
-hobby game project in March 2021
+# SnakeWeb (March 2021)
 
